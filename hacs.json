@@ -1,5 +1,4 @@
 {
   "name": "Ambient One Air Quality",
-  "render_readme": true,
-  "domains": ["air_quality", "sensor"]
+  "render_readme": true
 }
