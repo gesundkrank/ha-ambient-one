@@ -50,7 +50,6 @@ After setup, you should see:
 - `sensor.studio_air_quality_category` - Category (Good/Moderate/Poor/Severe)
 - `sensor.studio_battery` - Battery level
 - `sensor.studio_wifi_signal` - WiFi signal (disabled by default)
-- `air_quality.studio_air_quality` - Unified air quality entity
 
 ## Verify Data Updates
 
@@ -75,17 +74,6 @@ Settings → System → Logs
    - State value is a number (not "Unknown" or "Unavailable")
    - `last_updated` timestamp refreshes every 60 seconds
    - Attributes show device_id, firmware_version, etc.
-
-### Test Air Quality Entity
-
-1. Go to **Developer Tools** → **States**
-2. Find `air_quality.studio_air_quality`
-3. Verify:
-   - `air_quality_index` has a value
-   - `particulate_matter_2_5` has a value
-   - `particulate_matter_10` has a value
-   - `carbon_dioxide` has a value
-   - Attributes include all sensor readings
 
 ## Common Issues
 
@@ -183,7 +171,6 @@ Before considering the integration complete:
 - [ ] Values update every 60 seconds
 - [ ] Attributes show correct device info
 - [ ] No errors in Home Assistant logs
-- [ ] Air quality entity shows correct data
 - [ ] Device info shows firmware version
 - [ ] Battery percentage is correct
 

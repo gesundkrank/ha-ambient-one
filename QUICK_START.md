@@ -40,7 +40,6 @@ git push -u origin main
    - Indoor Air Quality Score (0-10)
    - Battery and WiFi signal monitoring
    - Config flow UI setup
-   - Air quality platform support
    - Updates every 60 seconds
    ```
 5. Click "Publish release"

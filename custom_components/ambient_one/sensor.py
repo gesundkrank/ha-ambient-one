@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 import logging
+from typing import Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -13,10 +14,10 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-    CONCENTRATION_PARTS_PER_MILLION,
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
+    UnitOfDensity,
+    UnitOfRatio,
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
@@ -40,7 +41,7 @@ SENSOR_TYPES: tuple[AmbientOneSensorEntityDescription, ...] = (
     AmbientOneSensorEntityDescription(
         key="pm2_5",
         name="PM2.5",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=UnitOfDensity.MICROGRAMS_PER_CUBIC_METER,
         device_class=SensorDeviceClass.PM25,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: data.pm2_5,
@@ -48,7 +49,7 @@ SENSOR_TYPES: tuple[AmbientOneSensorEntityDescription, ...] = (
     AmbientOneSensorEntityDescription(
         key="pm1_0",
         name="PM1.0",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=UnitOfDensity.MICROGRAMS_PER_CUBIC_METER,
         device_class=SensorDeviceClass.PM1,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: data.pm1_0,
@@ -56,14 +57,14 @@ SENSOR_TYPES: tuple[AmbientOneSensorEntityDescription, ...] = (
     AmbientOneSensorEntityDescription(
         key="pm4_0",
         name="PM4.0",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=UnitOfDensity.MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: data.pm4_0,
     ),
     AmbientOneSensorEntityDescription(
         key="pm10_0",
         name="PM10",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        native_unit_of_measurement=UnitOfDensity.MICROGRAMS_PER_CUBIC_METER,
         device_class=SensorDeviceClass.PM10,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: data.pm10_0,
@@ -71,7 +72,7 @@ SENSOR_TYPES: tuple[AmbientOneSensorEntityDescription, ...] = (
     AmbientOneSensorEntityDescription(
         key="co2",
         name="CO2",
-        native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION,
+        native_unit_of_measurement=UnitOfRatio.PARTS_PER_MILLION,
         device_class=SensorDeviceClass.CO2,
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda data: data.co2,
@@ -168,6 +169,7 @@ class AmbientOneSensor(CoordinatorEntity, SensorEntity):
     """Representation of an Ambient One sensor."""
 
     entity_description: AmbientOneSensorEntityDescription
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -180,9 +182,8 @@ class AmbientOneSensor(CoordinatorEntity, SensorEntity):
         self.entity_description = description
         self._device = device
 
-        # Entity IDs and unique IDs
+        # Name comes from entity_description; HA adds the device name
         self._attr_unique_id = f"{device.device_id}_{description.key}"
-        self._attr_name = f"{device.name} {description.name}"
 
         # Device info for grouping entities
         self._attr_device_info = {
@@ -214,7 +215,7 @@ class AmbientOneSensor(CoordinatorEntity, SensorEntity):
         return self.entity_description.value_fn(sensor_data)
 
     @property
-    def extra_state_attributes(self) -> dict[str, any]:
+    def extra_state_attributes(self) -> dict[str, Any]:
         """Return additional attributes."""
         device_data = self.coordinator.data.get(self._device.device_id)
         if not device_data:

@@ -58,11 +58,6 @@ After setup, the integration creates the following entities for each Ambient One
 - **Battery** - Battery level (%)
 - **WiFi Signal** - WiFi signal strength (dBm)
 
-### Air Quality Entity
-- Unified air quality entity with PM2.5, PM10, and CO2 levels
-- Shows overall air quality index
-- Includes all pollutants as attributes
-
 ## Troubleshooting
 
 ### Integration won't add

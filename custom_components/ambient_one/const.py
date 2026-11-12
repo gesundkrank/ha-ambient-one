@@ -2,7 +2,7 @@
 from homeassistant.const import Platform
 
 DOMAIN = "ambient_one"
-PLATFORMS = [Platform.SENSOR, Platform.AIR_QUALITY]
+PLATFORMS = [Platform.SENSOR]
 
 # Configuration keys
 CONF_EMAIL = "email"

@@ -1,16 +1,15 @@
 """The Ambient One Air Quality integration."""
 from __future__ import annotations
 
+import asyncio
 from datetime import timedelta
 import logging
-
-import aiohttp
-import async_timeout
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
@@ -42,7 +41,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def async_update_data():
         """Fetch data from API."""
         try:
-            async with async_timeout.timeout(30):
+            async with asyncio.timeout(30):
                 devices = await client.get_devices()
                 device_data = {}
 
@@ -77,9 +76,22 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator,
     }
 
+    _remove_legacy_air_quality_entities(hass, entry)
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
+
+
+def _remove_legacy_air_quality_entities(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Remove air_quality entities left over from versions before 1.1.0.
+
+    The legacy air_quality platform was dropped; all its values are available as sensors.
+    """
+    registry = er.async_get(hass)
+    for entity in er.async_entries_for_config_entry(registry, entry.entry_id):
+        if entity.domain == "air_quality":
+            registry.async_remove(entity.entity_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

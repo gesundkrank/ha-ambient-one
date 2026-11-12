@@ -12,7 +12,6 @@ Home Assistant custom integration for the **Ambient One** air quality sensor fro
 - 🔋 **Device Diagnostics**: Battery level, WiFi signal strength, firmware version
 - 🏠 **Native Home Assistant Integration**: Config flow setup, automatic device discovery
 - ⚡ **Real-time Updates**: Polls every 60 seconds for fresh data
-- 📱 **Air Quality Entity**: Unified air quality platform support
 
 ## Monitored Parameters
 
@@ -35,6 +34,8 @@ Each Ambient One device provides:
 | WiFi Signal | dBm | Signal Strength |
 
 ## Installation
+
+Requires Home Assistant 2026.7 or newer.
 
 ### HACS (Recommended)
 
@@ -120,7 +121,6 @@ custom_components/ambient_one/
 ├── config_flow.py      # UI configuration flow
 ├── api.py              # Ambient One API client
 ├── sensor.py           # Sensor platform
-├── air_quality.py      # Air quality platform
 ├── strings.json        # UI strings
 └── translations/
     └── en.json         # English translations
