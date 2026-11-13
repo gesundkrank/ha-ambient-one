@@ -18,5 +18,17 @@
     "abort": {
       "already_configured": "This account is already configured"
     }
+  },
+  "entity": {
+    "sensor": {
+      "air_quality_category": {
+        "state": {
+          "good": "Good",
+          "moderate": "Moderate",
+          "poor": "Poor",
+          "severe": "Severe"
+        }
+      }
+    }
   }
 }

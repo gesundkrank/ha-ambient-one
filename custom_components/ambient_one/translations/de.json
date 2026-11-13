@@ -1,0 +1,34 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mit Ambient One verbinden",
+        "description": "Gib die Zugangsdaten deines Ambient-Works-Kontos ein",
+        "data": {
+          "email": "E-Mail",
+          "password": "Passwort"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur Ambient-One-API fehlgeschlagen",
+      "invalid_auth": "E-Mail oder Passwort ungültig",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Dieses Konto ist bereits eingerichtet"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "air_quality_category": {
+        "state": {
+          "good": "Gut",
+          "moderate": "Mäßig",
+          "poor": "Schlecht",
+          "severe": "Sehr schlecht"
+        }
+      }
+    }
+  }
+}

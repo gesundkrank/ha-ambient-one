@@ -29,6 +29,27 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+# Enum states of the air quality category sensor (translated in strings.json / translations).
+AQI_CATEGORIES = ["good", "moderate", "poor", "severe"]
+_unknown_categories: set[str] = set()
+
+
+def _aqi_category(value: str | None) -> str | None:
+    """Map the cloud category (e.g. "GOOD") to an enum state; unknown values become None."""
+    if not isinstance(value, str) or not value.strip():
+        return None
+    category = value.strip().lower()
+    if category in AQI_CATEGORIES:
+        return category
+    if category not in _unknown_categories:
+        _unknown_categories.add(category)
+        _LOGGER.warning(
+            "Unknown air quality category %r from the Ambient One API; please report it at "
+            "https://github.com/gesundkrank/ha-ambient-one/issues",
+            value,
+        )
+    return None
+
 
 @dataclass
 class AmbientOneSensorEntityDescription(SensorEntityDescription):
@@ -118,7 +139,10 @@ SENSOR_TYPES: tuple[AmbientOneSensorEntityDescription, ...] = (
         key="aqi_category",
         name="Air Quality Category",
         icon="mdi:information-outline",
-        value_fn=lambda data: data.aqi_category,
+        device_class=SensorDeviceClass.ENUM,
+        options=AQI_CATEGORIES,
+        translation_key="air_quality_category",
+        value_fn=lambda data: _aqi_category(data.aqi_category),
     ),
     AmbientOneSensorEntityDescription(
         key="battery",
@@ -242,6 +266,7 @@ class AmbientOneSensor(CoordinatorEntity, SensorEntity):
             "co2",
             "voc_index",
             "nox_index",
+            "aqi_category",  # raw cloud value, also when it is not one of the enum states
         ]:
             if sensor_data.aqi_category:
                 attributes["aqi_category"] = sensor_data.aqi_category

@@ -29,7 +29,7 @@ Each Ambient One device provides:
 | Temperature | °C | Ambient Temperature |
 | Humidity | % | Relative Humidity |
 | IAQ Score | 0-10 | Indoor Air Quality Score |
-| AQI Category | - | Good/Moderate/Poor/Severe |
+| AQI Category | - | good / moderate / poor / severe (enum sensor, translated in the UI, e.g. German "Gut / Mäßig / Schlecht / Sehr schlecht") |
 | Battery | % | Battery Level |
 | WiFi Signal | dBm | Signal Strength |
 
